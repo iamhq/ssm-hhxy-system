@@ -16,8 +16,6 @@ public class ManagerService {
 
 	@Autowired
 	ManagerMapper managerMapper;
-//	@Autowired
-//	DepartmentMapper departmentMapper;
 	
 	/**
 	 * 查询所有管理员
@@ -28,12 +26,18 @@ public class ManagerService {
 	}
 	
 	public Manager addOne(Manager manager) {
-//		Integer departmentId = manager.getManagerDepartmentId();
-//		System.out.println(departmentId);
-//		departmentMapper.selectByPrimaryKey(departmentId );
 		managerMapper.add(manager);
 		manager = managerMapper.selectByPrimaryKeyWithDept(manager.getManagerId());
 		return manager;
+	}
+
+	public boolean updateOne(Manager manager) {
+		boolean result = false;
+		int i = managerMapper.updateByPrimaryKey(manager);
+		if( i > 0) {
+			result = true;
+		}
+		return result;
 	}
 	
 }

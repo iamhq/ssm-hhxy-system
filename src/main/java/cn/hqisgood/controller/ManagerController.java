@@ -51,4 +51,11 @@ public class ManagerController {
 		manager = managerService.addOne(manager);
 		return Msg.success().add("newManager", manager);
 	}
+	//updateManager
+	@RequestMapping(value="/updateManager")
+	@ResponseBody
+	public Msg updateManager(@RequestBody Manager manager) {
+		boolean result = managerService.updateOne(manager);
+		return Msg.success().add("res", result);
+	}
 }
