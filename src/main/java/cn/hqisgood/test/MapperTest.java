@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import cn.hqisgood.bean.Manager;
 import cn.hqisgood.bean.ManagerExample;
+import cn.hqisgood.dao.DepartmentMapper;
 import cn.hqisgood.dao.ManagerMapper;
 
 //import cn.hqisgood.bean.Manager;
@@ -22,6 +23,8 @@ import cn.hqisgood.dao.ManagerMapper;
 public class MapperTest {
 	@Autowired
 	ManagerMapper managerMapper;
+	@Autowired
+	DepartmentMapper DepartmentMapper;
 
 	@Test
 	public void select() {
@@ -39,5 +42,14 @@ public class MapperTest {
 		List<Manager> managers = managerMapper.selectByExampleWithDept(example);
 		System.out.println("list:" + managers);
 
+	}
+	
+	
+	@Test
+	public void addM() {
+		Manager record = new Manager(null, "qqqqq", 1054801, "root");
+		int t = managerMapper.add(record );
+		System.out.println(t);
+		System.out.println(record);
 	}
 }

@@ -13,6 +13,7 @@ public interface ManagerMapper {
     int deleteByPrimaryKey(Integer managerId);
 
     int insert(Manager record);
+    int add(Manager record);
 
     int insertSelective(Manager record);
 

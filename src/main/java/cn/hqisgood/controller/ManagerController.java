@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import cn.hqisgood.bean.Manager;
 import cn.hqisgood.bean.Msg;
 import cn.hqisgood.service.ManagerService;
 
@@ -42,5 +43,12 @@ public class ManagerController {
 		List managers = managerService.getAll();
 		PageInfo pageInfo = new PageInfo(managers, 3);
 		return Msg.success().add("pageInfo", pageInfo);
+	}
+	
+	@RequestMapping(value="/addManager")
+	@ResponseBody
+	public Msg addManager(@RequestBody Manager manager) {
+		manager = managerService.addOne(manager);
+		return Msg.success().add("newManager", manager);
 	}
 }
