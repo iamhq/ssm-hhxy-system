@@ -1,0 +1,22 @@
+{
+  "plugins": {
+    "guess-types": {
+      
+    },
+    "outline": {
+      
+    },
+    "angular1": {
+      
+    }
+  },
+  "ecmaVersion": 5,
+  "libs": [
+    "browser"
+  ],
+  "ide": {
+    "scriptPaths": [
+      
+    ]
+  }
+}

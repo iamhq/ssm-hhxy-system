@@ -73,20 +73,21 @@
         <h3 class="modal-title" id="update-h3">修改管理员</h3>
       </div>
       <div>&nbsp</div>
-      <div class="modal-body">
-     	 <form role="form">
+      <div class="modal-body" >
+     	 <form role="form" id="update-form"">
      	 <div class="form-group top">
 			<label for="inputEmail3" class="col-sm-2 control-label">修改用户名</label>
 			<div class="col-md-10 col-sm-10">
-				<input type="email" class="form-control" id="in_name2" placeholder="请输入要修改的管理员姓名">
+				<input name="managerName"  type="email" class="form-control" id="in_name2" placeholder="请输入要修改的管理员姓名">
 				<span class="help-block"></span>
 			</div>
 		 </div>
 		<div>&nbsp</div>
+		<input id="update-hidden-in" name="managerId" type="hidden">
 		<div class="form-group top">
 			<label for="inputPassword3" class="col-sm-2 control-label">修改密码</label>
 				<div class="col-md-10 col-sm-10">
-					<input type="password" class="form-control" id="in_pass2" placeholder="请输入新密码"/>
+					<input name="managerPassword" type="password" class="form-control" id="in_pass2" placeholder="请输入新密码"/>
 					<span class="help-block"></span>
 				</div>
 		</div>
@@ -94,7 +95,7 @@
 		<div class="form-group top">
 			<label for="name" class="col-sm-2 control-label">重新选择院系</label> 
 			<div class="col-md-10 col-sm-10">
-				<select class="form-control" id="select_dept2">
+				<select name="managerDepartmentId" class="form-control" id="select_dept2">
 					<option>计算机科学与技术学院</option>
 					<option>2</option>
 				</select>

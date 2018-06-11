@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -51,11 +52,17 @@ public class ManagerController {
 		manager = managerService.addOne(manager);
 		return Msg.success().add("newManager", manager);
 	}
-	//updateManager
-	@RequestMapping(value="/updateManager")
+	
+	
+	
+	@RequestMapping(value="/updateManager/{id}", method=RequestMethod.PUT)
 	@ResponseBody
-	public Msg updateManager(@RequestBody Manager manager) {
+	public Msg updateManager(Manager manager) {
 		boolean result = managerService.updateOne(manager);
-		return Msg.success().add("res", result);
+		if (result) {
+			return Msg.success();
+		}else {
+			return Msg.fail();
+		}
 	}
 }

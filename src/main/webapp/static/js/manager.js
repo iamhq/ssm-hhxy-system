@@ -2,8 +2,8 @@
  * 
  */
 var APP_PATH;
-var currentId;
-var pnn;
+var changeId;//进行操作的id
+var pnn;//当前页号
 $(function() {
 	APP_PATH = window.location.href;
 	to_page(1);
@@ -14,7 +14,6 @@ function to_page(pn) {
 	$("#page_info_area").empty();
 	$("#managers_table tbody").empty();
 	$("#page_nav ul").empty();
-
 	$.ajax({
 		url : APP_PATH + "/managers",
 		data : "pn=" + pn,
@@ -23,6 +22,7 @@ function to_page(pn) {
 			var pageInfo = result.extend.pageInfo;
 			// 解析显示员工数据
 			build_managers_table(pageInfo);
+			$("tr").removeClass("success");
 			// 解析分页信息
 			build_managers_info(pageInfo);
 			// 显示分页nav
@@ -33,6 +33,7 @@ function to_page(pn) {
 }
 // 跳到最后一页
 function to_lastPage() {
+	$("tr").removeClass("success");
 	$.ajax({
 		url : APP_PATH + "/managers",
 		type : "GET",
@@ -43,6 +44,24 @@ function to_lastPage() {
 	});
 }
 
+//跳到指定页
+function to_page_update(pn) {
+	$("#managers_table tbody").empty();
+	$("tr").removeClass("success");
+	$.ajax({
+		url : APP_PATH + "/managers",
+		data : "pn=" + pn,
+		type : "GET",
+		success : function(result) {
+			var pageInfo = result.extend.pageInfo;
+			// 解析显示员工数据
+			build_managers_table(pageInfo);
+			pnn = pn;
+			var t = "#"+changeId;
+			$(t).addClass("success");
+		}
+	});
+}
 // 解析显示员工数据
 function build_managers_table(pageInfo) {
 	var managers = pageInfo.list;
@@ -68,8 +87,8 @@ function build_managers_table(pageInfo) {
 				"#managers_table tbody");
 		
 		editBtnTd.click(function(e){
-			currentId = $(this).parent().attr('id');
-			$("#update-h3").empty().append("修改管理员 " + currentId);
+			changeId = $(this).parent().attr('id');
+			$("#update-h3").empty().append("修改管理员 " + changeId);
 			build_modal_select("#select_dept2");
 			$("#managerUpdateModal").modal({});
 		});
@@ -96,7 +115,7 @@ function build_managers_nav(pageInfo) {
 
 	// 构建Li
 	var firstPageLi = $("<li></li>").append(
-			$("<a></a>").append("首页").attr("href", "#"));
+			$("<a></a>").append("首页"));
 	var pagesLi = $("<li></li>").append(
 			$("<a></a>").append("末页").attr("href", "#"));
 	var prePageLi = $("<li></li>").append(
@@ -146,7 +165,7 @@ function build_managers_nav(pageInfo) {
 	}
 }
 
-// 增加按钮点击事件,模态框显示
+// 顶部增加按钮绑定点击事件,模态框显示
 $("#manager_add_btn").click(function() {
 	$("#managerAddModal").modal({});
 	build_modal_select("#select_dept");
@@ -170,7 +189,7 @@ function build_modal_select(str) {
 
 }
 
-//添加按钮绑定事件
+//添加增加管理员按钮绑定事件
 $("#add_btn").click(function() {
 	// 1,校验表单数据
 	if (!validate_add_form("#in_name", "#in_pass")) {
@@ -196,43 +215,31 @@ $("#add_btn").click(function() {
 	});
 });
 
-//修改按钮绑定事件
-$("#update_btn").click(function() {
-	// 1,校验表单数据
-	if (!validate_add_form("#in_name2", "#in_pass2")) {
-		return;
-	}
-	// 验证通过发送请求
-	var username = $("#in_name2").val();
-	var password = $("#in_pass2").val();
-	var dept_id = $("#select_dept2").val();
-	$.ajax({
-		url: APP_PATH + "/updateManager",
-		type: "POST",
-		data: JSON.stringify({
-			managerId: currentId,
-			managerName : username,
-			managerPassword : password,
-			managerDepartmentId : dept_id
-		}),
-		contentType : "application/json; charset=utf-8",
-		dataType : "json",
-		success : function(result) {
-			var t = result.extend.res + "";
-			if (t == "true") {
-				$("#managerUpdateModal").modal('hide');
-				to_page(pnn);
-			}else{
-				
-			}
-		}
-	});
-});
+
 // 添加管理员成功后,隐藏模态框，到最后一页
 function build_add_table(result) {
 	$("#managerAddModal").modal('hide');
 	var pn = to_lastPage();
 }
+//修改按钮绑定事件
+$("#update_btn").click(function() {
+	
+	// 1,校验表单数据
+	if (!validate_add_form("#in_name2", "#in_pass2")) {
+		return;
+	}
+	// 验证通过发送请求
+	$("#update-hidden-in").attr("value",changeId);
+	$.ajax({
+		url: APP_PATH + "/updateManager/" + changeId,
+		type: "POST",
+		data: $("#update-form").serialize() + "&_method=PUT",
+		success : function(result) {
+			$("#managerUpdateModal").modal('hide');
+			to_page_update(pnn);
+		}
+	});
+});
 
 // 校验表单数据
 function validate_add_form(str_name, str_pass) {
