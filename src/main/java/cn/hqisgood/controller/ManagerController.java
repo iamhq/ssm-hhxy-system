@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,5 +65,26 @@ public class ManagerController {
 		}else {
 			return Msg.fail();
 		}
+	}
+	/**
+	 * 1-1-1 批量删除
+	 * 1     删除一条记录
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value="/delManagerById/{ids}", method=RequestMethod.DELETE)
+	@ResponseBody
+	public Msg delManagerById(@PathVariable("ids")String ids) {
+		int result = 0;
+		if (ids.contains("-")) {
+			result = managerService.delBatch(ids);
+		}else {
+			result = managerService.delManagerById(Integer.parseInt(ids));
+		}
+		if (result > 0) {
+			return Msg.success();
+		}
+		return Msg.fail();
+		
 	}
 }

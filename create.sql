@@ -48,13 +48,15 @@ insert into salary_record values(null, 54801, '张显', '2018-04-01', '6000');
 create table t_teacher(
 	teacher_id INT(9) primary key NOT NULL,
 	teacher_name VARCHAR(255) NOT NULL,
-	manager_department_id INT(7) NOT NULL,
+	manager_department_id INT(9) NOT NULL,
 	teacher_password VARCHAR(255) NOT NULL,
-	teacher_salary VARCHAR(255) NOT NULL,
+	teacher_email VARCHAR(255) NOT NULL,
+	teacher_salary VARCHAR(255),
 	foreign key (`manager_department_id`) references `t_department`(`department_id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
 
-insert into t_manager values(54801,'张显', 1054802, 'root');
+insert into t_teacher values(1111155,'张显', 1054801, 'root', "555555@163.com", null);
+
 
 
 --create table `mybatis`.`t_customer`(
@@ -65,4 +67,4 @@ insert into t_manager values(54801,'张显', 1054802, 'root');
 -- );
 -- 
 -- insert into t_customer values(1, '白展堂', '死跑堂的', '110');
---drop table salary_record;
+--drop table t_teacher;

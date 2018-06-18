@@ -8,7 +8,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-<title>管理员</title>
+<title>超级管理员</title>
 <%
 	pageContext.setAttribute("APP_PATH", request.getContextPath());
 %>
@@ -31,7 +31,7 @@
      	 <div class="form-group top">
 			<label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
 			<div class="col-md-10 col-sm-10">
-				<input type="email" class="form-control" id="in_name" placeholder="请输入管理员姓名">
+				<input type="text" class="form-control" id="in_name" placeholder="请输入管理员姓名">
 				<span class="help-block"></span>
 			</div>
 		 </div>
@@ -47,7 +47,7 @@
 		<div class="form-group top">
 			<label for="name" class="col-sm-2 control-label">选择院系</label> 
 			<div class="col-md-10 col-sm-10">
-				<select class="form-control" id="select_dept">
+				<select class="form-control" id="select_depts">
 					<option>计算机科学与技术学院</option>
 					<option>2</option>
 				</select>
@@ -78,7 +78,7 @@
      	 <div class="form-group top">
 			<label for="inputEmail3" class="col-sm-2 control-label">修改用户名</label>
 			<div class="col-md-10 col-sm-10">
-				<input name="managerName"  type="email" class="form-control" id="in_name2" placeholder="请输入要修改的管理员姓名">
+				<input name="managerName"  type="text" class="form-control" id="in_name2" placeholder="请输入要修改的管理员姓名">
 				<span class="help-block"></span>
 			</div>
 		 </div>
@@ -95,7 +95,7 @@
 		<div class="form-group top">
 			<label for="name" class="col-sm-2 control-label">重新选择院系</label> 
 			<div class="col-md-10 col-sm-10">
-				<select name="managerDepartmentId" class="form-control" id="select_dept2">
+				<select name="managerDepartmentId" class="form-control" id="select_depts2">
 					<option>计算机科学与技术学院</option>
 					<option>2</option>
 				</select>
@@ -111,28 +111,48 @@
     </div>
   </div>
 </div>
-
-
 	<div class="container">
-
-		<div class="row ">
+		<div class="row">
 			<div class="page-header">
 				<h2 class="text-center">
 					<img src="${APP_PATH }/static/img/logo.PNG " />管理员列表
 				</h2>
 			</div>
 			<div class="panel panel-default">
-				<div class="panel-body text-right">
-					<button class="btn btn-primary text-center" id="manager_add_btn">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true" >新增</span>
-					</button>
+				<div class="panel-body text-left row">
+					<form action="${APP_PATH }/searchM">
+						<label class="col-md-1 col-sm-1 text-right">名字</label>
+						<input class="col-md-3 col-sm-3" type="text" name="managerName"> 
+						<label class="col-md-1 col-sm-1">选择院系</label>
+						<select class="col-md-3 col-sm-3" id="select_depts3">
+							<option>计算机科学与技术学院</option>
+							<option>2</option>
+						</select>
+						<span class="col-md-1 col-sm-1 text-left">
+						<button type="submit" class="btn btn-default">
+							<span class="glyphicon glyphicon-search " aria-hidden="true">搜索</span>
+						</button>
+						</span>
+						<span class="col-md-1 col-sm-1">
+						<button type="button" class="btn btn-primary " id="manager_add_btn" >
+							<span class="glyphicon glyphicon-plus" aria-hidden="true">新增</span>
+							</button>
+						</span>
+						<span class=" col-md-1 col-sm-1">
+						<button type="button" class="btn btn-danger " id="manager_del_btn_all">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true">批量删除</span>
+							</button>
+						</span>
+					</form>
 				</div>
 			</div>
-			
 			<div class="col-md-12 col-xs-12">
-				<table class="table table-hover" id="managers_table">
+				<table class="table table-hover " id="managers_table">
 					<thead>
-						<tr class="info">
+						<tr class="info " >
+							<td class="col-md-1 col-xs-1 text-right">
+								<input type="checkbox" id="checkbox_all">
+							</td>
 							<td>管理员ID</td>
 							<td>管理员用户名</td>
 							<td>所在部门</td>
@@ -140,24 +160,14 @@
 							<td>删除</td>
 						</tr>
 					</thead>
-					<tbody>
-
-					</tbody>
-
-
+					<tbody></tbody>
 					<tfoot>
 						<tr>
-							<td >
-								<p id="page_info_area"></p>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							
 						</tr>
 					</tfoot>
 				</table>
-
+				<p id="page_info_area"></p>
 			</div>
 			<nav aria-label="Page navigation" id="page_nav" class="text-center">
 				<ul class="pagination">
@@ -171,8 +181,7 @@
 	<script src="${APP_PATH }/static/js/jquery-1.11.3.min.js"></script>
 	<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 	<script src="${APP_PATH }/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-	<script src="${APP_PATH }/static/js/manager.js"></script>
-	
+	<script src="${APP_PATH }/static/js/m2.js"></script>
 </body>
 
 </html>
