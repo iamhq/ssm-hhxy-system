@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.hqisgood.bean.SuperManager;
 import cn.hqisgood.bean.Teacher;
+import cn.hqisgood.bean.TeacherExample;
+import cn.hqisgood.bean.TeacherExample.Criteria;
 import cn.hqisgood.bean.User;
 import cn.hqisgood.dao.TeacherMapper;
 
@@ -52,4 +53,24 @@ public class TeacherService {
 		// TODO Auto-generated method stub
 		return teacherMapper.selectByExampleWithDept(null);
 	}
+
+	public boolean updateOne(Teacher teacher) {
+		boolean result = false;
+		TeacherExample example = new TeacherExample();
+		Criteria  criteria = example.createCriteria();
+		criteria.andTeacherIdEqualTo(teacher.getTeacherId());
+		
+		int i = teacherMapper.updateByExampleSelective(teacher, example);
+		if( i > 0) {
+			result = true;
+		}
+		return result;
+	}
+
+	public Teacher addOne(Teacher teacher) {
+		teacherMapper.add(teacher);
+		teacher = teacherMapper.selectByPrimaryKeyWithDept(teacher.getTeacherId());
+		return teacher;
+	}
+
 }

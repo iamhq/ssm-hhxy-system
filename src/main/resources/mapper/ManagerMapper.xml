@@ -161,7 +161,7 @@
     values (#{managerId,jdbcType=INTEGER}, #{managerName,jdbcType=VARCHAR}, #{managerDepartmentId,jdbcType=INTEGER}, 
       #{managerPassword,jdbcType=VARCHAR})
   </insert>
-    <insert id="add" parameterType="cn.hqisgood.bean.Manager" useGeneratedKeys="true" keyProperty="managerId">
+  <insert id="add" parameterType="cn.hqisgood.bean.Manager" useGeneratedKeys="true" keyProperty="managerId">
     insert into t_manager (manager_id, manager_name, manager_department_id, 
       manager_password)
     values (#{managerId,jdbcType=INTEGER}, #{managerName,jdbcType=VARCHAR}, #{managerDepartmentId,jdbcType=INTEGER}, 

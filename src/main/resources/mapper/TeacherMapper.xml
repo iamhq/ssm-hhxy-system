@@ -8,6 +8,14 @@
     <result column="teacher_password" jdbcType="VARCHAR" property="teacherPassword" />
     <result column="teacher_salary" jdbcType="VARCHAR" property="teacherSalary" />
     <result column="teacher_email" jdbcType="VARCHAR" property="teacherEmail" />
+  </resultMap>
+    <resultMap id="DeptResultMap" type="cn.hqisgood.bean.Teacher">
+    <id column="teacher_id" jdbcType="INTEGER" property="teacherId" />
+    <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
+    <result column="manager_department_id" jdbcType="INTEGER" property="managerDepartmentId" />
+    <result column="teacher_password" jdbcType="VARCHAR" property="teacherPassword" />
+    <result column="teacher_salary" jdbcType="VARCHAR" property="teacherSalary" />
+    <result column="teacher_email" jdbcType="VARCHAR" property="teacherEmail" />
     <association property="department" javaType="cn.hqisgood.bean.Department">
     	<id column="department_id" property="departmentId"/>
     	<result column="department_name" property="departmentName"/>
@@ -92,7 +100,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExampleWithDept" parameterType="cn.hqisgood.bean.TeacherExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithDept" parameterType="cn.hqisgood.bean.TeacherExample" resultMap="DeptResultMap">
     select
     <if test="distinct">
       distinct
@@ -107,7 +115,13 @@
       order by ${orderByClause}
     </if>
   </select>
-  
+  <select id="selectByPrimaryKeyWithDept" parameterType="java.lang.Integer" resultMap="DeptResultMap">
+    select 
+    <include refid="WithDept_Column_List" />
+    from t_teacher t
+    left join t_department d on t.manager_department_id = d.department_id
+    where teacher_id = #{teacherId,jdbcType=INTEGER}
+  </select>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -125,6 +139,12 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+  <insert id="add" parameterType="cn.hqisgood.bean.Teacher" useGeneratedKeys="true" keyProperty="teacherId">
+    insert t_teacher (teacher_id, teacher_name, manager_department_id, 
+      teacher_password, teacher_salary, teacher_email)
+        values (#{teacherId,jdbcType=INTEGER}, #{teacherName,jdbcType=VARCHAR}, #{managerDepartmentId,jdbcType=INTEGER}, 
+      #{teacherPassword,jdbcType=VARCHAR}, #{teacherSalary,jdbcType=VARCHAR}, #{teacherEmail,jdbcType=VARCHAR})
+  </insert>
   <insert id="insert" parameterType="cn.hqisgood.bean.Teacher">
     insert into t_teacher (teacher_id, teacher_name, manager_department_id, 
       teacher_password, teacher_salary, teacher_email)

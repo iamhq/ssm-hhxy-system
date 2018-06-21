@@ -1,5 +1,6 @@
 package cn.hqisgood.dao;
 
+import cn.hqisgood.bean.Manager;
 import cn.hqisgood.bean.Teacher;
 import cn.hqisgood.bean.TeacherExample;
 import java.util.List;
@@ -13,12 +14,15 @@ public interface TeacherMapper {
     int deleteByPrimaryKey(Integer teacherId);
 
     int insert(Teacher record);
+    int add(Teacher teacher);
 
     int insertSelective(Teacher record);
 
     List<Teacher> selectByExample(TeacherExample example);
 
     Teacher selectByPrimaryKey(Integer teacherId);
+    
+    Teacher selectByPrimaryKeyWithDept(Integer teacherId);
 
     int updateByExampleSelective(@Param("record") Teacher record, @Param("example") TeacherExample example);
 

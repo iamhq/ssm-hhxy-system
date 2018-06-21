@@ -25,7 +25,7 @@ import cn.hqisgood.service.SuperService;
 import cn.hqisgood.service.TeacherService;
 
 @Controller
-public class userController {
+public class UserController {
 	@Autowired
 	ManagerService managerService;
 	@Autowired
@@ -97,13 +97,5 @@ public class userController {
 		return "login";
 	}
 	
-	@RequestMapping("/teachers")
-	@ResponseBody
-	public Msg getTeachers(@RequestParam(value="pn", defaultValue="1")Integer pn) {
-		PageHelper.startPage(pn, 5);
-		List teachers = teacherService.getAll();
-		System.out.println(teachers);
-		PageInfo pageInfo = new PageInfo(teachers, 3);
-		return Msg.success().add("pageInfo", pageInfo);
-	}
+	
 }

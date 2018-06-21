@@ -2,7 +2,8 @@
  * 
  */
 var APP_PATH;
-var changeId;// 进行操作的id
+var changeId;// 当前进行操作的id
+var name;//当前进行操作的用户名
 var pnn;// 当前页号
 var lastPage;//
 var size;// 当前页记录数
@@ -98,12 +99,17 @@ function build_teachers_table(pageInfo) {
 				departmentNameTd).append(emailTd).append(saralyTd).append(editBtnTd).append(delBtnTd).attr("id",item.teacherId).appendTo(
 				"#teachers_table tbody");
 		editBtnTd.click(function(e){
-			changeId = $(this).parent().attr('id');
+			changeId = item.teacherId
+			name = item.teacherName;
+			$("#update-hidden-in").attr("value",changeId);
+		    
 			log(changeId);
-			$("#update-h3").empty().append("修改管理员 " + changeId);
+			$("#update-h3").empty().append("修改教师 " + changeId);
 			build_select("#select_depts2");
 			$("#teacherUpdateModal").modal({});
 		});
+		
+		
 	});
 }
 // 解析分页信息
@@ -195,23 +201,7 @@ function build_select(str) {
 		}
 	});
 }
-// 校验表单数据
-function validate_add_form(str_name, str_pass) {
-	var regName = /(^[\u4e00-\u9fa5_a-zA-Z0-9_]{2,10}$)/;
-	var regWord = /^[a-zA-Z0-9]{4,20}$/;
 
-	// 获得校验结果，显示提示信息
-	var result1 = validate(str_name, regName, "2到10个中英文");
-	var result2 = validate(str_pass, regWord, "密码至少4位，由英文和数字组成");
-
-	// 返回校验结果
-	if (result1 && result2) {
-		return true;
-	} else {
-		return false;
-	}
-
-}
 // 返回表单数据校验结果
 function validate(ele, reg, msg) {
 	// 1,取得数据,清空
@@ -265,26 +255,44 @@ $("#search").click(function(){
 // 顶部增加按钮绑定点击事件,模态框显示
 $("#teacher_add_btn").click(function() {
 	$("#teacherAddModal").modal({});
-	build_select("#select_depts");
+	build_select("#select_depts_add");
 });
 
 // 添加增加管理员按钮绑定事件
 $("#add_btn").click(function() {
 	// 1,校验表单数据
-	if (!validate_add_form("#in_name", "#in_pass")) {
+	var regSalary = /^[0-9]{1,5}$/;
+	var regName = /(^[\u4e00-\u9fa5_a-zA-Z0-9_]{2,10}$)/;
+	var regPass = /^[a-zA-Z0-9]{4,20}$/;
+	var regId = /(^[0-9_]{1,9}$)/;
+	var regEmail = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+	
+	var r1 = validate("#in_id_add", regId, "9位以内数字");
+	var r2 = validate("#in_name_add", regName, "2到10个中英文");
+	var r3 = validate("#in_pass_add", regPass, "密码至少4位，由英文和数字组成");
+	var r4 = validate("#in_email_add", regEmail, "邮箱格式不正确");
+	var r5 = validate("#in_salary_add", regSalary, "不超过5位的数字");
+	
+	if (!(r1&&r2&&r3&&r4&&r5)) {
 		return;
 	}
 	// 验证通过发送请求
-	var username = $("#in_name").val();
-	var password = $("#in_pass").val();
-	var dept_id = $("#select_depts").val();
+	var id = $("#in_id_add").val();
+	var password = $("#in_pass_add").val();
+	var username = $("#in_name_add").val();
+	var salary = $("#in_salary_add").val();
+	var dept_id = $("#select_depts_add").val();
+	var email = $("#in_email_add").val();
 	$.ajax({
-		url : APP_PATH + "/addteacher",
+		url : APP_PATH + "/addTeacher",
 		type : "POST",
 		data : JSON.stringify({
+			teacherId : id,
 			teacherName : username,
 			teacherPassword : password,
-			teacherDepartmentId : dept_id
+			managerDepartmentId : dept_id,
+			teacherSalary : salary,
+			teacherEmail : email
 		}),
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
@@ -298,13 +306,13 @@ $("#add_btn").click(function() {
 // 修改按钮绑定事件
 $("#update_btn").click(function() {
 	// 1,校验表单数据
-	if (!validate_add_form("#in_name2", "#in_pass2")) {
+	var regSalary = /^[0-9]{1,5}$/;
+	if (!validate("#in_salary", regSalary, "不超过5位的数字")) {
 		return;
 	}
 	// 验证通过发送请求
-	$("#update-hidden-in").attr("value",changeId);
 	$.ajax({
-		url: APP_PATH + "/updateteacher/" + changeId,
+		url: APP_PATH + "/updateTeacher/" + changeId,
 		type: "PUT",
 		data: $("#update-form").serialize() + "&_method=PUT",
 		success : function(result) {
