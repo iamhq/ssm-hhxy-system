@@ -17,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 
 import cn.hqisgood.bean.Manager;
 import cn.hqisgood.bean.Msg;
+import cn.hqisgood.bean.Teacher;
 import cn.hqisgood.service.ManagerService;
 
 @Controller
@@ -46,6 +47,18 @@ public class ManagerController {
 		PageInfo pageInfo = new PageInfo(managers, 3);
 		return Msg.success().add("pageInfo", pageInfo);
 	}
+	
+	@RequestMapping(value="/searchM")
+	@ResponseBody
+	public Msg selectManagers(Manager m) {
+		List managers = managerService.selectManagers(m);
+//		PageHelper.startPage(1, 5);
+//		List managers = managerService.getAll();
+//		PageInfo pageInfo = new PageInfo(managers, 3);
+//		return Msg.success().add("pageInfo", pageInfo);
+		return Msg.success().add("ms", managers);
+	}
+	
 	
 	@RequestMapping(value="/addManager")
 	@ResponseBody

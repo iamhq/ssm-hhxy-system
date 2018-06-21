@@ -27,4 +27,6 @@ public interface TeacherMapper {
     int updateByPrimaryKeySelective(Teacher record);
 
     int updateByPrimaryKey(Teacher record);
+
+	List selectByExampleWithDept(TeacherExample example);
 }

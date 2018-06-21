@@ -30,10 +30,11 @@
 			</div>
 
 			<form action="${APP_PATH }/check" , method="post">
-				<div class="col-md-4 col-md-offset-4 col-xs-8 col-xs-offset-2">
+				<div class="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
 					<h2 class="form-signin-heading ">登录</h2>
 					<br />
-					<ul class="nav nav-tabs">
+					<div >
+						<ul class="nav  nav-tabs">
 						<li id="1" class="li active" role="presentation">
 							<a>super管理员登录</a>
 						</li>
@@ -45,6 +46,7 @@
 						</li>
 						<input id="hidden_li_in" name="u" type="hidden" value="1">
 					</ul>
+					</div>
 					<br />
 					<div class="input-group">
 						<span class="input-group-addon" id="sizing-addon2">&nbsp;@&nbsp&nbsp;</span>

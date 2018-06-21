@@ -8,7 +8,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-<title>超级管理员</title>
+<title>系统管理员</title>
 <%
 	pageContext.setAttribute("APP_PATH", request.getContextPath());
 %>
@@ -115,21 +115,22 @@
 		<div class="row">
 			<div class="page-header">
 				<h2 class="text-center">
-					<img src="${APP_PATH }/static/img/logo.PNG " />管理员列表
+					<img src="${APP_PATH }/static/img/logo.PNG " />系统管理员
 				</h2>
 			</div>
+			<h4>操作院系管理员</h4>
 			<div class="panel panel-default">
 				<div class="panel-body text-left row">
-					<form action="${APP_PATH }/searchM">
+					<form >
 						<label class="col-md-1 col-sm-1 text-right">名字</label>
-						<input class="col-md-3 col-sm-3" type="text" name="managerName"> 
+						<input id="search_n" class="col-md-3 col-sm-3" type="text" name="managerName"> 
 						<label class="col-md-1 col-sm-1">选择院系</label>
-						<select class="col-md-3 col-sm-3" id="select_depts3">
+						<select  id="search_d" class="col-md-3 col-sm-3" id="select_depts3">
 							<option>计算机科学与技术学院</option>
 							<option>2</option>
 						</select>
 						<span class="col-md-1 col-sm-1 text-left">
-						<button type="submit" class="btn btn-default">
+						<button id="search" type="button" class="btn btn-default">
 							<span class="glyphicon glyphicon-search " aria-hidden="true">搜索</span>
 						</button>
 						</span>

@@ -15,7 +15,6 @@ public class SuperService {
 	
 	public SuperManager login(User user) {
 		Integer id = user.getUserId();
-		System.out.println("id = " + id);
 		String password = user.getPassword();
 		SuperManager su = managerMapper.selectByPrimaryKey(id);
 		if (su == null) {

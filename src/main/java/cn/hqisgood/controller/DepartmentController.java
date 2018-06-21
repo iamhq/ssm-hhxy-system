@@ -23,5 +23,13 @@ public class DepartmentController {
 		return Msg.success().add("depts", depts);
 		
 	}
+	
+	@RequestMapping("/dept")
+	@ResponseBody
+	public Msg getDept(Integer id) {
+		Department dept = departmentService.getDept(id);
+		return Msg.success().add("dept", dept);
+		
+	}
 
 }

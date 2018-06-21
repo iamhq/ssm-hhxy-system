@@ -106,7 +106,25 @@
     left join t_department d on m.manager_department_id = d.department_id
     where manager_id = #{managerId,jdbcType=INTEGER}
   </select>
-  
+  <select id="search" parameterType="cn.hqisgood.bean.Manager" resultMap="WithDeptResultMap">
+  	select 
+  	    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithDept_Column_List" />
+  	from t_manager m
+  	left join t_department d on m.manager_department_id = d.department_id
+  	<where>
+           
+            <if test="manager_name != null and manager_name != ''">
+                AND manager_name LIKE "%"#{managerName}"%"
+            </if>
+            <if test="manager_department_id != null and manager_department_id != '' and manager_department_id != '-1'">
+                AND manager_department_id = #{managerDepartmentId}
+            </if>
+        </where>
+      
+  </select>
   <select id="selectByExample" parameterType="cn.hqisgood.bean.ManagerExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

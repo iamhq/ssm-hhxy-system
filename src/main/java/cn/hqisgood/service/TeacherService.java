@@ -1,5 +1,7 @@
 package cn.hqisgood.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,6 @@ public class TeacherService {
 
 	public Teacher login(User user) {
 		Integer id = user.getUserId();
-		System.out.println("id = " + id);
 		String password = user.getPassword();
 		Teacher t = teacherMapper.selectByPrimaryKey(id);
 		if (t == null) {
@@ -33,5 +34,22 @@ public class TeacherService {
 		}else {
 			return null;
 		}
+	}
+
+	//插入老师
+	public Boolean insert(Teacher teacher) {
+		
+		System.out.println("insert"+teacher.getTeacherEmail());
+		int i = teacherMapper.insert(teacher);
+		if (i > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public List getAll() {
+		// TODO Auto-generated method stub
+		return teacherMapper.selectByExampleWithDept(null);
 	}
 }

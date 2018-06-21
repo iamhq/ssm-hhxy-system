@@ -83,4 +83,10 @@ public class ManagerService {
 			return null;
 		}
 	}
+
+	public List selectManagers(Manager m) {
+		List<Manager> list =  managerMapper.search();
+		System.out.println(list);
+		return null;
+	}
 }

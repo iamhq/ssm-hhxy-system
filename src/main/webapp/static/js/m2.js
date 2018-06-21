@@ -2,12 +2,13 @@
  * 
  */
 var APP_PATH;
-var changeId;//进行操作的id
-var pnn;//当前页号
+var changeId;// 进行操作的id
+var pnn;// 当前页号
 var lastPage;//
-var size;//当前页记录数
+var size;// 当前页记录数
 $(function() {
-	APP_PATH = window.location.href;
+	var split = window.location.href.split("/check");
+	APP_PATH = split[0];
 	to_page(1);
 	select_depts3();
 });
@@ -18,22 +19,19 @@ function log(str){
 // 跳到指定页
 function to_page(pn) {
 	$("tr").removeClass("success");
-	$("#page_info_area").empty();
-	$("#managers_table tbody").empty();
-	$("#page_nav ul").empty();
 	$.ajax({
 		url : APP_PATH + "/managers",
 		data : "pn=" + pn,
 		type : "GET",
 		success : function(result) {
+			log("to_page");
 			var pageInfo = result.extend.pageInfo;
 			// 解析显示员工数据
 			build_managers_table(pageInfo);
-			$("tr").removeClass("success");
 			// 解析分页信息
 			build_managers_info(pageInfo);
 			// 显示分页nav
-			build_managers_nav(pageInfo);
+			build_managers_nav(pageInfo, 1);
 			pnn = pn;
 		}
 	});
@@ -41,24 +39,19 @@ function to_page(pn) {
 // 跳到最后一页
 function to_lastPage() {
 	$("tr").removeClass("success");
-	$("#page_info_area").empty();
-	$("#managers_table tbody").empty();
-	$("#page_nav ul").empty();
 	$.ajax({
 		url : APP_PATH + "/managers",
 		type : "GET",
 		success : function(result) {
 			var pages = result.extend.pageInfo.pages;
 			to_page(pages);
-			lastPage = pages;
 		}
 	});
 	
 	to_page(lastPage);
 }
-//跳到指定页
+// 跳到指定页
 function to_page_update(pn) {
-	$("#managers_table tbody").empty();
 	$("tr").removeClass("success");
 	$.ajax({
 		url : APP_PATH + "/managers",
@@ -75,6 +68,7 @@ function to_page_update(pn) {
 }
 // 解析显示员工数据
 function build_managers_table(pageInfo) {
+	$("#managers_table tbody").empty();
 	var managers = pageInfo.list;
 	size = pageInfo.size;
 	$.each(managers, function(index, item) {
@@ -109,6 +103,7 @@ function build_managers_table(pageInfo) {
 }
 // 解析分页信息
 function build_managers_info(pageInfo) {
+	$("#page_info_area").empty();
 	var pages = pageInfo.pages;
 	var pageNum = pageInfo.pageNum;
 	var total = pageInfo.total;
@@ -117,7 +112,8 @@ function build_managers_info(pageInfo) {
 			"第" + pageNum + "页，总" + pages + "页，总" + total + "记录");
 }
 // 显示分页nav
-function build_managers_nav(pageInfo) {
+function build_managers_nav(pageInfo, i) {
+	$("#page_nav ul").empty();
 	var ul = $("#page_nav ul")
 	var navigatepageNums = pageInfo.navigatepageNums;
 	var pages = pageInfo.pages;
@@ -155,28 +151,30 @@ function build_managers_nav(pageInfo) {
 	ul.append(pagesLi);
 
 	// Li绑定事件
-	if (hasPreviousPage) {
-		prePageLi.click(function() {
-			to_page(pageNum - 1);
-		});
-	}
-	if (hasNextPage) {
-		nextPageLi.click(function() {
-			to_page(pageNum + 1);
-		});
-	}
-	if (pageNum !== 1) {
-		firstPageLi.click(function() {
-			to_page(1);
-		});
-	}
-	if (pageNum !== pages) {
-		pagesLi.click(function() {
-			to_page(pages);
-		});
+	if ( i == 1) {
+		if (hasPreviousPage) {
+			prePageLi.click(function() {
+				to_page(pageNum - 1);
+			});
+		}
+		if (hasNextPage) {
+			nextPageLi.click(function() {
+				to_page(pageNum + 1);
+			});
+		}
+		if (pageNum !== 1) {
+			firstPageLi.click(function() {
+				to_page(1);
+			});
+		}
+		if (pageNum !== pages) {
+			pagesLi.click(function() {
+				to_page(pages);
+			});
+		}
 	}
 }
-//获取部门列表
+// 获取部门列表
 function build_select(str) {
 	// 获得部门信息，显示
 	$.ajax({
@@ -209,7 +207,7 @@ function validate_add_form(str_name, str_pass) {
 	}
 
 }
-//返回表单数据校验结果
+// 返回表单数据校验结果
 function validate(ele, reg, msg) {
 	// 1,取得数据,清空
 	var eleVal = $(ele).val();
@@ -227,16 +225,36 @@ function validate(ele, reg, msg) {
 		return false;
 	}
 }
-//seacher获取部门列表
+// seacher获取部门列表
 function select_depts3() {
-	build_select("#select_depts3");
+	build_select("#search_d");
+	log("dd");
 	setTimeout(function() {
 		var opt = $("<option></option>").append("全部")
 		.attr("value", "-1").attr("selected", "selected");
-		opt.prependTo("#select_depts3");
+		opt.prependTo("#search_d");
 	},500);
 }
 
+$("#search").click(function(){
+	$("tr").removeClass("success");
+	var name = $("#search_n").val();
+	var dept = $("#search_d").val();
+	$.ajax({
+		url : APP_PATH + "/searchM",
+		type : "POST",
+		data : JSON.stringify({
+			managerName : name,
+			managerDepartmentId : dept
+		}),
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		success : function(result) {
+			$("#managerAddModal").modal('hide');
+			to_lastPage(); 
+		}
+	});
+})
 
 
 // 顶部增加按钮绑定点击事件,模态框显示
@@ -245,7 +263,7 @@ $("#manager_add_btn").click(function() {
 	build_select("#select_depts");
 });
 
-//添加增加管理员按钮绑定事件
+// 添加增加管理员按钮绑定事件
 $("#add_btn").click(function() {
 	// 1,校验表单数据
 	if (!validate_add_form("#in_name", "#in_pass")) {
@@ -272,7 +290,7 @@ $("#add_btn").click(function() {
 	});
 });
 
-//修改按钮绑定事件
+// 修改按钮绑定事件
 $("#update_btn").click(function() {
 	// 1,校验表单数据
 	if (!validate_add_form("#in_name2", "#in_pass2")) {
@@ -315,7 +333,7 @@ $(document).on("click", ".checkbox_item", function() {
 	$("#checkbox_all").prop("checked", flag);
 })
 
-//批量删除
+// 批量删除
 $("#manager_del_btn_all").click(function() {
 	var ids="";
 	$.each($(".checkbox_item:checked"), function() {

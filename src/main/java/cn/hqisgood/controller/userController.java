@@ -1,5 +1,7 @@
 package cn.hqisgood.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import cn.hqisgood.bean.Manager;
+import cn.hqisgood.bean.Msg;
 import cn.hqisgood.bean.SuperManager;
 import cn.hqisgood.bean.Teacher;
 import cn.hqisgood.bean.User;
@@ -70,5 +78,32 @@ public class userController {
 	@RequestMapping("/toRegister")
 	public String toRegister() {
 		return "register";
+	}
+	
+	@RequestMapping("/register")
+	public String register(Teacher teacher, Model model, HttpSession session) {
+		System.out.println("controller " + teacher.getTeacherEmail());
+		Boolean flag = teacherService.insert(teacher);
+		if (flag) {
+			return "login";
+		} else {
+			model.addAttribute("msg", "注册失败");
+			return "register";
+		}
+		
+	}
+	@RequestMapping("/toLogin")
+	public String toLogin() {
+		return "login";
+	}
+	
+	@RequestMapping("/teachers")
+	@ResponseBody
+	public Msg getTeachers(@RequestParam(value="pn", defaultValue="1")Integer pn) {
+		PageHelper.startPage(pn, 5);
+		List teachers = teacherService.getAll();
+		System.out.println(teachers);
+		PageInfo pageInfo = new PageInfo(teachers, 3);
+		return Msg.success().add("pageInfo", pageInfo);
 	}
 }

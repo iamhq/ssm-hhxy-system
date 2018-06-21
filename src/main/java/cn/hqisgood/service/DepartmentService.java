@@ -19,4 +19,9 @@ public class DepartmentService {
 		return list;
 	}
 
+	public Department getDept(Integer id) {
+		Department dept = departmentMapper.selectByPrimaryKey(id);
+		return dept;
+	}
+
 }
