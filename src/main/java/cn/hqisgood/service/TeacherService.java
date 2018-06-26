@@ -73,4 +73,11 @@ public class TeacherService {
 		return teacher;
 	}
 
+	
+	
+	public int delTeacherById(Integer id) {
+		int result = teacherMapper.deleteByPrimaryKey(id);
+		return result;
+	}
+
 }

@@ -24,7 +24,6 @@ function to_page(pn) {
 		data : "pn=" + pn,
 		type : "GET",
 		success : function(result) {
-			log("to_page");
 			var pageInfo = result.extend.pageInfo;
 			// 解析显示员工数据
 			build_managers_table(pageInfo);
@@ -140,9 +139,17 @@ function build_managers_nav(pageInfo, i) {
 		ul.append(numPageLi);
 		if (pageNum !== item) {
 			// 绑定事件
-			numPageLi.click(function() {
-				to_page(item);
-			});
+			if (i == 1){
+				numPageLi.click(function() {
+					to_page(item);
+				});
+			}
+			if (i == 2){
+				numPageLi.click(function() {
+					to_page_s(item);
+				});
+			}
+			
 		} else {
 			numPageLi.addClass("active");
 		}
@@ -173,6 +180,29 @@ function build_managers_nav(pageInfo, i) {
 			});
 		}
 	}
+	if ( i == 2) {
+		if (hasPreviousPage) {
+			prePageLi.click(function() {
+				to_page_s(pageNum - 1);
+			});
+		}
+		if (hasNextPage) {
+			nextPageLi.click(function() {
+				to_page_s(pageNum + 1);
+			});
+		}
+		if (pageNum !== 1) {
+			firstPageLi.click(function() {
+				to_page_s(1);
+			});
+		}
+		if (pageNum !== pages) {
+			pagesLi.click(function() {
+				to_page_s(pages);
+			});
+		}
+	}
+	
 }
 // 获取部门列表
 function build_select(str) {
@@ -228,15 +258,14 @@ function validate(ele, reg, msg) {
 // seacher获取部门列表
 function select_depts3() {
 	build_select("#search_d");
-	log("dd");
 	setTimeout(function() {
 		var opt = $("<option></option>").append("全部")
 		.attr("value", "-1").attr("selected", "selected");
 		opt.prependTo("#search_d");
 	},500);
 }
-
-$("#search").click(function(){
+//模糊查询跳到指定页
+function to_page_s(pn) {
 	$("tr").removeClass("success");
 	var name = $("#search_n").val();
 	var dept = $("#search_d").val();
@@ -245,15 +274,29 @@ $("#search").click(function(){
 		type : "POST",
 		data : JSON.stringify({
 			managerName : name,
-			managerDepartmentId : dept
+			managerDepartmentId : dept,
+			pn : pn
 		}),
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		success : function(result) {
-			$("#managerAddModal").modal('hide');
-			to_lastPage(); 
+			var pageInfo = result.extend.pageInfo;
+			// 解析显示员工数据
+			build_managers_table(pageInfo);
+			// 解析分页信息
+			build_managers_info(pageInfo);
+			// 显示分页nav
+			build_managers_nav(pageInfo, 2);
+			pnn = pn;
 		}
 	});
+}
+
+
+
+//模糊查询
+$("#search").click(function(){
+	to_page_s(1);
 })
 
 

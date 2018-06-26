@@ -50,13 +50,21 @@ public class ManagerController {
 	
 	@RequestMapping(value="/searchM")
 	@ResponseBody
-	public Msg selectManagers(Manager m) {
-		List managers = managerService.selectManagers(m);
-//		PageHelper.startPage(1, 5);
-//		List managers = managerService.getAll();
-//		PageInfo pageInfo = new PageInfo(managers, 3);
-//		return Msg.success().add("pageInfo", pageInfo);
-		return Msg.success().add("ms", managers);
+	public Msg selectManagers(@RequestBody Manager m) {
+		
+		
+		System.out.println(m.getPn());
+		
+		if (m.getPn() == null) {
+			m.setPn(1);
+		}
+		PageHelper.startPage(m.getPn(), 5);
+		List<Manager> managers = managerService.selectManagers(m);
+		PageInfo pageInfo = new PageInfo(managers, 3);
+		if (managers == null) {
+			return Msg.success().add("pageInfo", "isNull");
+		}
+		return Msg.success().add("pageInfo", pageInfo);
 	}
 	
 	

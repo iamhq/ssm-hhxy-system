@@ -103,13 +103,10 @@ function build_teachers_table(pageInfo) {
 			name = item.teacherName;
 			$("#update-hidden-in").attr("value",changeId);
 		    
-			log(changeId);
 			$("#update-h3").empty().append("修改教师 " + changeId);
 			build_select("#select_depts2");
 			$("#teacherUpdateModal").modal({});
 		});
-		
-		
 	});
 }
 // 解析分页信息
@@ -327,7 +324,7 @@ $(document).on("click", ".del", function() {
 	log(changeId);
 	if (confirm("确认删除管理员： " + changeId)) {
 		$.ajax({
-			url: APP_PATH + "/delteacherById/" + changeId,
+			url: APP_PATH + "/delTeacherById/" + changeId,
 			type: "DELETE",
 			success: function(result) {
 				alert(result.msg);

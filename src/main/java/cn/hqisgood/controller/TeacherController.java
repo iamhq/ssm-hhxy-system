@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import cn.hqisgood.bean.Manager;
 import cn.hqisgood.bean.Msg;
 import cn.hqisgood.bean.Teacher;
 import cn.hqisgood.service.TeacherService;
@@ -48,8 +48,19 @@ public class TeacherController {
 	@ResponseBody
 	public Msg addTeacher(@RequestBody Teacher teacher) {
 		teacher = teacherService.addOne(teacher);
-		return Msg.success().add("newManager", teacher);
+		return Msg.success().add("newteacher", teacher);
 	}
+	//delteacherById
 	
+	@RequestMapping(value="/delTeacherById/{ids}", method=RequestMethod.DELETE)
+	@ResponseBody
+	public Msg delteacherById(@PathVariable("ids")String ids) {
+		int result = teacherService.delTeacherById(Integer.parseInt(ids));
+		if (result > 0) {
+			return Msg.success();
+		}
+		return Msg.fail();
+		
+	}
 	
 }

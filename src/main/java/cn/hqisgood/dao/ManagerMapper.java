@@ -33,5 +33,5 @@ public interface ManagerMapper {
 
     int updateByPrimaryKey(Manager record);
 
-    List<Manager> search();
+    List<Manager> search(Manager m);
 }

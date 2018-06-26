@@ -10,8 +10,16 @@ public class Manager {
 	private String managerPassword;
     
     private Department department;
+    
+    private Integer pn;
 
-    @Override
+    public Integer getPn() {
+		return pn;
+	}
+	public void setPn(Integer pn) {
+		this.pn = pn;
+	}
+	@Override
    	public String toString() {
    		return "Manager [managerId=" + managerId + ", managerName=" + managerName + ", managerDepartmentId="
    				+ managerDepartmentId + ", managerPassword=" + managerPassword + ", department=" + department + "]";

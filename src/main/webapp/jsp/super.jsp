@@ -182,7 +182,7 @@
 	<script src="${APP_PATH }/static/js/jquery-1.11.3.min.js"></script>
 	<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 	<script src="${APP_PATH }/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-	<script src="${APP_PATH }/static/js/m2.js"></script>
+	<script src="${APP_PATH }/static/js/super.js"></script>
 </body>
 
 </html>
